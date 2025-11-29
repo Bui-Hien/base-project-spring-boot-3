@@ -1,0 +1,258 @@
+{
+  "validation": {
+    "required": "Đây là trường bắt buộc",
+    "invalid_email": "Email không hợp lệ",
+    "duplicateCode": "Mã không được trùng",
+    "endDateMustBeAfterStartDate": "Ngày kết thúc phải sau hoặc bằng ngày bắt đầu",
+    "invalidStatus": "Trạng thái không hợp lệ",
+    "workingDaysExceed": "Số ngày ước tính vượt quá số ngày thực tế",
+    "minLength": "Độ dài tối thiểu là {{min}} ký tự",
+    "maxLength": "Độ dài tối đa là {{max}} ký tự",
+    "min": "Giá trị tối thiểu là {{min}}",
+    "max": "Giá trị tối đa là {{max}}",
+    "positive": "Giá trị phải là số dương",
+    "negative": "Giá trị phải là số âm",
+    "integer": "Giá trị phải là số nguyên",
+    "passwordStrength": "Mật khẩu phải có chữ hoa, chữ thường, số và ký tự đặc biệt",
+    "priceGreaterThanUnitPrice": "Giá tiền phải lớn hơn hoặc bằng đơn giá",
+    "invalid_phone": "Số điện thoại không hợp lệ",
+    "invalid_url": "URL không hợp lệ",
+    "passwordMismatch": "Mật khẩu xác nhận không khớp",
+    "fileSize": "Kích thước file tối đa là {{size}}MB",
+    "fileType": "Định dạng file không hợp lệ",
+    "dateInvalid": "Ngày không hợp lệ",
+    "dateMustBeInFuture": "Ngày phải trong tương lai",
+    "dateMustBeInPast": "Ngày phải trong quá khứ",
+    "mustBeGreaterThan": "Giá trị phải lớn hơn {{value}}",
+    "mustBeLessThan": "Giá trị phải nhỏ hơn {{value}}",
+    "onlyNumbers": "Chỉ được nhập số",
+    "onlyLetters": "Chỉ được nhập chữ",
+    "alphanumeric": "Chỉ được nhập chữ và số",
+    "noSpecialChars": "Không được chứa ký tự đặc biệt",
+    "uniqueValue": "Giá trị đã tồn tại",
+    "arrayMin": "Phải chọn ít nhất {{min}} mục",
+    "arrayMax": "Chỉ được chọn tối đa {{max}} mục",
+    "invalidFormat": "Định dạng không hợp lệ",
+    "tooShort": "Quá ngắn",
+    "tooLong": "Quá dài",
+    "onlineLessThanTotal": "Số người online phải nhỏ hơn hoặc bằng tổng số người",
+    "minMinutes" : "Thời gian bảo hành tối thiểu là {{min}} phút"
+  },
+  "general": {
+    "button": {
+      "view": "Xem chi tiết",
+      "add": "Thêm mới",
+      "delete": "Xóa",
+      "save": "Lưu",
+      "cancel": "Hủy",
+      "edit": "Chỉnh sửa",
+      "select": "Lựa chọn",
+      "filter": "Bộ lọc",
+      "search": "Tìm kiếm",
+      "reset": "Đặt lại",
+      "back": "Quay lại",
+      "update": "Cập nhật",
+      "importExcel": "Nhập Excel",
+      "selectFile": "Chọn tệp",
+      "size": "Kích thước",
+      "fileName": "Tên tệp",
+      "close": "Đóng",
+      "remove": "Xoá",
+      "upload": "Tải lên",
+      "send": "Gửi",
+      "deselect": "Bỏ chọn",
+      "exportExcel": "Xuất excel",
+      "expand": "Xem đầy đủ",
+      "collapse": "Thu gọn",
+      "preview": "Xem trước",
+      "view-img": "Xem ảnh"
+    },
+    "action": "Thao tác",
+    "enterSearch": "Nhập từ khóa",
+    "rowsPerPage": "Số hàng mỗi trang:",
+    "required": "Đây là trường bắt buộc",
+    "language": "Ngôn ngữ",
+    "emptyDataMessageTable": "Không có dữ liệu",
+    "emptyFile": "Trống",
+    "totalRows": "Tổng số bản ghi:",
+    "gotoPage": "Đi tới trang:",
+    "toHomepage": "Đi đến trang chủ",
+    "successExport": "Xuất Excel thành công!",
+    "close": "Đóng",
+    "keyword": "Nhập từ khóa tìm kiếm"
+  },
+  "toast": {
+    "error": "Có lỗi xảy ra, vui lòng thử lại!",
+    "delete_success": "Đã xóa thành công!",
+    "please_select": "Hãy chọn ít nhất 1 mục để xóa!",
+    "duplicate_code": "Mã đã được sử dụng!",
+    "duplicate_name": "Tên đã được sử dụng!",
+    "update_success": "Cập nhật thành công!",
+    "save_success": "Lưu thành công!",
+    "add_success": "Thêm mới thành công!",
+    "user_exist": "Tên đăng nhập đã tồn tại!",
+    "change_password_success": "Đã thay đổi mật khẩu!",
+    "change_password_failure": "Có lỗi khi thay đổi mật khẩu!",
+    "timekeeping_success": "Đã điểm danh!",
+    "load_fail": "Có lỗi xảy ra khi tải dữ liệu, vui lòng thử lại sau",
+    "successExport": "Xuất tệp Excel thành công!",
+    "errorExport": "Xuất tệp Excel thất bại. Vui lòng thử lại.",
+    "successImport": "Nhập tệp Excel thành công!",
+    "errorImport": "Nhập tệp Excel thất bại. Vui lòng kiểm tra định dạng tệp hoặc dữ liệu."
+  },
+  "confirm_dialog": {
+    "createUser": {
+      "title": "Xác nhận tạo người dùng",
+      "text": "Bạn có chắc chắn muốn tạo người dùng cho những nhân viên đã chọn?",
+      "agree": "Xác nhận",
+      "cancel": "Hủy"
+    },
+    "delete": {
+      "title": "Xác nhận xóa",
+      "text": "Bạn có chắc chắn muốn xóa bản ghi này?",
+      "agree": "Xác nhận",
+      "cancel": "Hủy"
+    },
+    "delete_list": {
+      "title": "Xác nhận xóa",
+      "text": "Bạn có chắc chắn muốn xóa các bản ghi đã chọn?",
+      "agree": "Xác nhận",
+      "cancel": "Hủy"
+    },
+    "confirm_close": {
+      "title": "Xác nhận huỷ",
+      "text": "Bạn có chắc chắn huỷ?",
+      "agree": "Xác nhận",
+      "cancel": "Hủy"
+    },
+    "confirm_download_excel": {
+      "title": "Xác nhận tải Excel",
+      "text": "Bạn có muốn tải không? Quá trình này có thể mất vài phút.",
+      "agree": "Xác nhận",
+      "cancel": "Hủy"
+    }
+  },
+  "signIn": {
+    "title": "Đăng nhập"
+  },
+  "signUp": {
+    "title": "Đăng ký",
+    "titleForm": "Đăng ký tài khoản",
+    "infoLogin": "Thông tin đăng nhập"
+  },
+  "role": {
+    "title": "Vai trò",
+    "name": "Tên",
+    "authority": "Quyền",
+    "createdBy": "Người tạo"
+  },
+  "table": {
+    "no-data": "Không có dữ liệu",
+    "total-elements": "Tổng số bản ghi",
+    "rows-per-page": "Số dòng/trang"
+  },
+  "navigation": {
+    "home": "Trang chủ",
+    "deposit": "Nạp tiền",
+    "buyNow": "Mua ngay",
+    "guarantee": "Sự đảm bảo",
+    "notification": "Thông báo",
+    "instruction": "Hướng dẫn",
+    "order": "Lịch sửa mua hàng",
+    "transaction": "Giao dịch",
+    "sellerManagement": {
+      "title": "Quản lý bán hàng",
+      "dashboard": "Dashboard Thống Kê",
+      "accountList": "Danh sách tài khoản",
+      "soldList": "Danh sách NICK đã bán",
+      "complaint": "Khiếu nại",
+      "wallet": "Ví"
+    },
+    "admin": {
+      "title": "Quản lý hệ thống",
+      "dashboard": "Dashboard Thống Kê chung",
+      "systemStatistic": "Thống kê người dùng",
+      "notification": "Thông báo",
+      "accountCategory": "Danh mục tài khoản",
+      "accountList": "Danh sách tài khoản",
+      "bank": "Ngân hàng",
+      "reason": "Lý do",
+      "systemConfig": "Cấu hình hệ thống",
+      "vipLevel": "VIP",
+      "systemUser": "Người dùng hệ thống",
+      "post": "Bài viết",
+      "instruction": "Hướng dẫn",
+      "transaction": "Giao dịch"
+    }
+  },
+  "system-config": {
+    "key": "Key",
+    "type": "Kiểu dự liệu",
+    "value": "Giá trị",
+    "description": "Mô tả cấu hệ thống"
+  },
+  "bank": {
+    "code": "Mã ngân hàng",
+    "name": "Tên ngân hàng",
+    "description": "Mô tả"
+  },
+  "vip": {
+    "code": "Mã vip",
+    "name": "Tên vip",
+    "description": "Mô tả",
+    "minDeposit": "Số tiền tối thiểu"
+  },
+  "reason": {
+    "code": "Mã lý do",
+    "name": "Tên lý do",
+    "description": "Mô tả"
+  },
+  "notification": {
+    "title": "Tiêu đề",
+    "content": "Nội dung thông báo"
+  },
+  "post": {
+    "title": "Tiêu đề bài viết",
+    "status": "Trạng thái bài viết",
+    "author-name": "Tác giá bài viết",
+    "content": "Nội dung bài viết",
+    "caption": "Ảnh bìa",
+    "no-content": "Chưa có nội dung",
+    "view": "Lượt xem",
+    "img-caption": "Ảnh bìa là trường bắt buộc"
+  },
+  "dashboard": {
+    "title": "Bảng điều khiển tổng quan)",
+    "header": "Bảng thống kê",
+    "sub-header": "Tổng quan doanh thu và đơn hàng",
+    "total-revenue": "Tổng doanh thu",
+    "total-order": "Tổng số đơn hàng",
+    "order-success": "Đơn hàng thành công",
+    "order-error": "Đơn hàng lỗi",
+    "order-refund": "Đơn hàng hoàn tiền",
+    "order-processing": "Đơn hàng đang xử lý",
+    "percentage-success": "Tỷ lệ thành công",
+    "reporting-period": "Kỳ báo cáo:",
+    "revenue-by": "Doanh thu theo",
+    "choose-time": "Chọn khoảng thời gian",
+    "revenue": "Doanh thu",
+    "order-status": "Phân bổ trạng thái đơn hàng",
+    "statistics-seller": "Thống kê theo người bán",
+    "seller-user": "Người bán",
+    "fromDate": "Từ ngày",
+    "toDate": "Đến ngày",
+    "success": "Thành công",
+    "error": "Lỗi",
+    "refund": "Hoàn tiền",
+    "processing": "Đang xử lý",
+    "filter": {
+      "day": "Ngày",
+      "month": "Tháng"
+    }
+  },
+  "systemStatistics": {
+    "title": "Thống kê người dùng",
+    "totalUsers": "Tổng số người dùng",
+    "totalOnlineUsers": "Tổng số người đang trực tuyến"
+  }
+}

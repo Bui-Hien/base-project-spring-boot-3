@@ -1,0 +1,92 @@
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 2GB
+      max-request-size: 2GB
+  application:
+    name: core
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3333/core?createDatabaseIfNotExist=true}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.jdbc.batch_size: 300
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+  jackson:
+    default-property-inclusion: NON_NULL
+    time-zone: GMT+7
+  mail:
+    from: buixuanhienmy@gmail.com
+    name: Roblox
+    host: smtp.gmail.com
+    port: 587
+    username: buixuanhienmy@gmail.com
+    password: oikykwowpdyyoqkm
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.starttls.required: true
+      mail.smtp.ssl.protocols: TLSv1.2
+  web:
+    resources:
+      static-locations: file:${save-file-folder-public}/
+
+save-file-folder: ${SAVE_FILE_FOLDER:D:/roblox}
+save-file-folder-public: ${save-file-folder}/public
+
+endpoint:
+  url: ${ENDPOINT_URL:http://localhost:8071}
+  url-reset-password: ${ENDPOINT_URL:http://localhost:3000}/reset-password
+  url-active-user: ${endpoint.url}/api/user/public/active-user
+  url-home-page: http://localhost:3000/home
+
+server:
+  port: ${SERVER_PORT:8071}
+
+payment:
+  vnPay:
+    url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+    tmnCode: 58X4B4HP
+    secretKey: VRLDWNVWDNPCOEPBZUTWSEDQAGXJCNGZ
+    returnUrl: ${endpoint.url}/api/payment/vn-pay-callback
+    version: 2.1.0
+    command: pay
+    orderType: other
+jwt:
+  expiryHour: 8
+  expiryDay: 14
+  accessKey: c2VjcmV0QGtleS5hcGlfaGFzX2JlZW5fZGVzaWduZWRfYnlfVGF5TFE=
+  refreshKey: 9k1jJAWAKQCnCEz1pwcPNegbHoLugf9hgEnn6sz5pFc=
+  resetKey: 2OeEeG48CvIcH1K0UAXbSo/7gPj3QLJ7MnQZuscRirQ=
+  activeUserKey: 2OeEeG48CvIcH1K0UAXbSo/7gPj3QLJ7MnQZuscRirK=
+
+maxFailedLoginAttempts: 5
+
+system:
+  online:
+    active-minutes: 5 # coi user online nếu hoạt động trong 5 phút
+    update-interval-minutes: 5  # thời gian chạy job (minutes)
+    history-retention-days: 30  # Xóa bản ghi thống kê cũ hơn 30 ngày
+  otp:
+    registration-expiration-minutes: 1  # OTP đăng ký hết hạn 1 phút
+    wallet-expiration-minutes: 1        # OTP ví hết hạn 1 phút
+  job:
+    otp-cleanup-interval-minutes: 5     # Job xoá OTP hết hạn chạy mỗi 5 phút
+
+telegram:
+  bots:
+    transaction:
+      username: hien_dev_test_bot
+      token: 8420880049:AAGcTJrNfLtBvlbteVT40p4UFzwHT8id7_o
+      webhookPath: /api/telegram/public/noti
+ffmpeg:
+  path: C:/workspace/roblox/env/ffmpeg-2025-11-24-git-c732564d2e-essentials_build/bin/ffmpeg.exe
+
+cors:
+  allowed-origins: "http://localhost:8071, http://localhost:3000, http://localhost:3001, http://localhost:3002, http://localhost:3003, http://localhost:8080, http://buihien2k3.ddnsfree.com:3000, https://buihien2k3.ddnsfree.com:8443, http://buihien2k3.ddnsfree.com:8443"

@@ -1,0 +1,12 @@
+# backend/.dockerignore
+target/
+*.jar
+*.war
+*.zip
+.git/
+.gitignore
+README.md
+Dockerfile
+docker-compose.yml
+.env
+*.log
