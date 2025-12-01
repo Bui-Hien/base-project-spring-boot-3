@@ -16,8 +16,7 @@ export default observer (function LoginIndex () {
   const {loginObject, resetStore, handleLogin} = authStore;
 
   const validationSchema = Yup.object ({
-    email:Yup.string ()
-        .email ("Tên đăng nhập không đúng định dạng")
+    username:Yup.string ()
         .required ("Vui lòng nhập tên đăng nhập")
         .nullable (),
     password:Yup.string ()
@@ -75,8 +74,8 @@ export default observer (function LoginIndex () {
 
                     <div className="space-y-5">
                       <CommonTextField
-                          label={i18next.t ("Email đăng nhập")}
-                          name="email"
+                          label={i18next.t ("Tên đăng nhập")}
+                          name="username"
                           required
                           className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
                       />

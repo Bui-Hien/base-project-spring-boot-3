@@ -25,7 +25,6 @@ import SEO from "../Component/SEO";
 import { formatMoney } from "../../LocalFunction";
 import Avatar from "@mui/material/Avatar";
 import NotFound from "./NotFound";
-import PageFooter from "../Component/PageFooter";
 
 // Bảng màu mới - Hiện đại và hài hòa hơn
 const COLORS = {
@@ -37,9 +36,9 @@ const COLORS = {
 };
 // Màu theme tổng thể (Header + Nav)
 const THEME = {
-  headerBg: "#0F0F1A",
-  navBg: "#0F0F1A",
-  navGradient: "linear-gradient(to bottom, #0F0F1A, #0F0F1A)", // nếu bạn vẫn muốn gradient nhưng cùng màu
+  headerBg:"#0F0F1A",
+  navBg:"#0F0F1A",
+  navGradient:"linear-gradient(to bottom, #0F0F1A, #0F0F1A)", // nếu bạn vẫn muốn gradient nhưng cùng màu
 };
 const DRAWER_WIDTH = 240;
 
@@ -66,10 +65,10 @@ function AppLayout ({routes}) {
     handleLogout:handleLogoutStore
   } = authStore;
 
-  const handleLogout = () => {
-    handleLogoutStore ();
+  const handleLogout = async () => {
+    await handleLogoutStore ();
     setShouldOpenLogout (false);
-    navigate (HOME_PAGE);
+    navigate (LOGIN_PAGE);
   };
 
   const [shouldOpenLogout, setShouldOpenLogout] = React.useState (false);
@@ -127,7 +126,7 @@ function AppLayout ({routes}) {
                           color:textColor,
                           transition:'all 0.2s ease',
                           '&:hover':{
-                            backgroundColor: COLORS.hoverBg || THEME.hoverBg,
+                            backgroundColor:COLORS.hoverBg || THEME.hoverBg,
                           }
                         }}
                         className={`flex !justify-center h-12 ${!open && '!p-0'}`}
@@ -215,9 +214,9 @@ function AppLayout ({routes}) {
         {/* AppBar - Gradient đẹp hơn */}
         <header
             className="fixed top-0 z-[1201] transition-all duration-300 ease-sharp ml-0 w-full shadow-lg"
-            style={{ backgroundColor: THEME.headerBg }}
+            style={{backgroundColor:THEME.headerBg}}
         >
-        <Toolbar className={"flex justify-between"}>
+          <Toolbar className={"flex justify-between"}>
             <div className="flex items-center">
               <IconButton
                   color="inherit"
@@ -339,11 +338,11 @@ function AppLayout ({routes}) {
               <aside
                   className="fixed top-0 left-0 h-full z-50 overflow-hidden transition-all duration-300 ease-sharp flex-shrink-0 whitespace-nowrap box-border flex flex-col shadow-2xl"
                   style={{
-                    width: open ? `${DRAWER_WIDTH}px` : 'calc(theme(spacing.7) + 1px)',
-                    background: THEME.navBg,
+                    width:open? `${DRAWER_WIDTH}px` : 'calc(theme(spacing.7) + 1px)',
+                    background:THEME.navBg,
                   }}
               >
-              <div className="flex items-center justify-end p-2 min-h-[64px] flex-shrink-0"/>
+                <div className="flex items-center justify-end p-2 min-h-[64px] flex-shrink-0"/>
                 <div className="flex-1 overflow-y-auto overflow-x-hidden">
                   <List className="!py-2 !px-2">{renderNavItems (navigations)}</List>
                 </div>
@@ -377,7 +376,6 @@ function AppLayout ({routes}) {
                 })}
                 <Route path="*" element={<NotFound/>}/>
               </Routes>
-              <PageFooter/>
             </div>
           </main>
         </div>

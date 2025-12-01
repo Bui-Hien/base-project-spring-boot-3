@@ -23,6 +23,7 @@ public class Group extends Auditable {
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     @Where(clause = "voided = false")
+    @OrderBy("createdAt")
     private Set<GroupRole> roles;
 
     public Group() {

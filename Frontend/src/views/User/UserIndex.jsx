@@ -4,8 +4,6 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores";
 import UserForm from "./UserForm";
 import CommonBreadcrumb from "../../common/CommonBreadcrumb";
-import UserList from "./UserList";
-import AlertDialog from "../../common/CommonConfirmationDialog";
 import UserToolbar from "./UserToolbar";
 import { ListUserTab } from "../../LocalConstants";
 import { Tab, Tabs } from "@mui/material";
@@ -49,18 +47,18 @@ function UserIndex () {
             {name:t ("navigation.admin.systemUser")},
           ]}/>
         </div>
-        {/*<div className="index-card grid grid-cols-12 px-4">*/}
+        <div className="index-card grid grid-cols-12 px-4">
           <div className={"col-span-12"}>
             <UserToolbar/>
           </div>
-        {/*  <div className={"col-span-12"}>*/}
-        {/*    <UserTabComponent*/}
-        {/*        currentTab={currentTab}*/}
-        {/*        handleChange={handleChange}*/}
-        {/*    />*/}
-        {/*    <UserList/>*/}
-        {/*  </div>*/}
-        {/*</div>*/}
+          {/*  <div className={"col-span-12"}>*/}
+          {/*    <UserTabComponent*/}
+          {/*        currentTab={currentTab}*/}
+          {/*        handleChange={handleChange}*/}
+          {/*    />*/}
+          {/*    <UserList/>*/}
+          {/*  </div>*/}
+        </div>
 
         {openCreateEditPopup && (
             <UserForm/>

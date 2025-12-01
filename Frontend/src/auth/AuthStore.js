@@ -1,16 +1,13 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import "react-toastify/dist/ReactToastify.css";
-import { accessToken, getCurrentUser } from "./authService";
+import { accessToken, getCurrentUser, removeToken } from "./AuthService";
 import { toast } from "react-toastify";
 import i18next from "i18next";
 import { getMessageResponse, safeClone } from "../LocalFunction";
+import SignInDto from "../dto/auth/SignInDto";
 
 export default class AuthStore {
-  intactLoginObject = {
-    email:"",
-    password:"",
-  };
-  loginObject = safeClone (this.intactLoginObject);
+  loginObject = safeClone (new SignInDto ());
 
   roles = [];
   currentUser = null;
@@ -22,13 +19,11 @@ export default class AuthStore {
   getCurrentUser = async () => {
     try {
       const {data} = await getCurrentUser ();
-      // Gán currentUser
-      this.currentUser = data.data || null;
-
-      // Gán roles là danh sách name
-      this.roles = Array.isArray (data.data.roles)
-          ? data.data.roles.map (r => r?.name).filter (Boolean)
-          : [];
+      runInAction (() => {
+        this.currentUser = data.data || null;
+        this.roles = data.data?.permissions || [];
+      });
+      console.log (this.roles)
       return this.currentUser;
     } catch (error) {
       console.error (error);
@@ -50,13 +45,26 @@ export default class AuthStore {
     }
   };
 
-  handleLogout = () => {
-    localStorage.removeItem ("access_token");
-    localStorage.removeItem ("refresh_token");
-    this.currentUser = null;
-    this.roles = [];
+  handleLogout = async () => {
+    try {
+      const payload = {
+        refreshToken:localStorage.getItem ("refresh_token")
+      };
+      await removeToken (payload);
+    } catch (err) {
+      console.error ("Error during logout:", err);
+    } finally {
+      runInAction (() => {
+        this.currentUser = null;
+        this.roles = [];
+      });
+
+      localStorage.removeItem ("access_token");
+      localStorage.removeItem ("refresh_token");
+    }
   };
+
   resetStore = () => {
-    this.loginObject = safeClone (this.intactLoginObject);
+    this.loginObject = safeClone (new SignInDto ());
   };
 }

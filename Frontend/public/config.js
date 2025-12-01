@@ -6,6 +6,6 @@ window.Configs = {
   RESET_PASSWORD:"/reset-password",
   FORGOT_PASSWORD:"/forgot-password",
   REGISTER:"/register",
-  HOME_PAGE:"/home",
+  HOME_PAGE:"/admin/system-config",
   PROFILE:"/profile"
 };

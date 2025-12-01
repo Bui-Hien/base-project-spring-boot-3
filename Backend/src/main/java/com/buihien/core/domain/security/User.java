@@ -50,10 +50,12 @@ public class User extends Auditable implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Where(clause = "voided = false")
+    @OrderBy("createdAt")
     private Set<UserRole> roles;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Where(clause = "voided = false")
+    @OrderBy("createdAt")
     private Set<GroupUser> groups;
 
     public User() {

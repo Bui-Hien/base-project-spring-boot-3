@@ -9,7 +9,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from "@mui/icons-material/Close";
 import CommonTextField from "../../../common/Form/CommonTextField";
 import { useStore } from "../../../stores";
-import ChangePasswordDto from "../../../common/dto/auth/ChangePasswordDto";
+import ChangePasswordDto from "../../../dto/auth/ChangePasswordDto";
 
 function ChangePasswordTab () {
   const navigate = useNavigate ();

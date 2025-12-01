@@ -30,6 +30,12 @@ public class RestAuthenticationController {
         return new ResponseData<>(HttpStatus.ACCEPTED.value(), "Lấy refresh token thành công", authenticationService.refreshToken(dto, request));
     }
 
+    @PostMapping("/remove-token")
+    public ResponseData<TokenResponseDto> removeToken(@Valid @RequestBody TokenResponseDto dto, HttpServletRequest request) {
+        authenticationService.removeToken(dto, request);
+        return new ResponseData<>(HttpStatus.ACCEPTED.value(), "Xóa token thành công");
+    }
+
     @PostMapping("/forgot-password")
     public ResponseData<Boolean> forgotPassword(@Valid @RequestBody ForgotPasswordDto dto, HttpServletRequest request) {
         authenticationService.forgotPassword(dto, request);

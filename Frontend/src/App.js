@@ -58,7 +58,7 @@ function AppWrapper () {
 
     if (!configLoadedRef.current) {
       configLoadedRef.current = true;
-      handleGetAllSystemConfig ();
+      // handleGetAllSystemConfig ();
     }
   }, []);
 

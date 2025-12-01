@@ -13,4 +13,6 @@ public interface AuthenticationService {
     void resetPassword(ResetPasswordDto dto);
 
     void changePassword(ChangePasswordDto dto);
+
+    void removeToken(TokenResponseDto dto, HttpServletRequest request);
 }

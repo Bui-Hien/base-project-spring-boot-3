@@ -44,13 +44,9 @@ public class RoleServiceImpl extends GenericServiceImpl<Role, RoleDto, SearchDto
 
     @Override
     protected RoleDto convertToDto(Role entity) {
-        return new RoleDto(entity);
+        return new RoleDto(entity, true);
     }
 
-    /**
-     * FIXED: Publish event SAU KHI transaction commit
-     * Event listener sẽ xử lý cache invalidation
-     */
     @Override
     @Transactional
     public RoleDto saveOrUpdate(RoleDto dto) {
@@ -65,19 +61,14 @@ public class RoleServiceImpl extends GenericServiceImpl<Role, RoleDto, SearchDto
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
 
-        // Handle permissions
         rolePermissionService.handleSetPermissionForRole(dto, entity);
 
-        // Save entity
         entity = repository.save(entity);
 
-        // Lấy danh sách users bị ảnh hưởng TRƯỚC KHI publish event
         Set<String> affectedUserNames = getUserNamesByRole(entity.getId());
 
         log.debug("Role {} updated, affecting {} users", entity.getName(), affectedUserNames.size());
 
-        // Publish event - listener sẽ xử lý SAU KHI transaction commit
-        // Xem @TransactionalEventListener(phase = AFTER_COMMIT)
         eventPublisher.publishEvent(
                 new PermissionChangedEvent(affectedUserNames, UPDATE_CHANGE_TYPE)
         );
@@ -155,7 +146,7 @@ public class RoleServiceImpl extends GenericServiceImpl<Role, RoleDto, SearchDto
         int pageSize = (dto.getPageSize() == null || dto.getPageSize() < 10) ? 10 : dto.getPageSize();
 
         StringBuilder sqlCount = new StringBuilder("SELECT COUNT(entity.id) FROM Role entity WHERE (1=1) ");
-        StringBuilder sql = new StringBuilder("SELECT new com.buihien.core.dto.security.RoleDto(entity) FROM Role entity WHERE (1=1) ");
+        StringBuilder sql = new StringBuilder("SELECT new com.buihien.core.dto.security.RoleDto(entity, true) FROM Role entity WHERE (1=1) ");
 
         sql.append(builderWhereClause(dto));
         sqlCount.append(builderWhereClause(dto));

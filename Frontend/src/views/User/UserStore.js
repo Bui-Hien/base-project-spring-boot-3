@@ -10,13 +10,13 @@ import {
   saveUser,
   unEnabledUser,
   upDataInfo
-} from "./UserService";
+} from "../../service/UserService";
 import { toast } from "react-toastify";
 import i18n from "i18next";
-import UserDto from "../../common/dto/UserDto";
+import UserDto from "../../dto/security/UserDto";
 import { ListUserTab } from "../../LocalConstants";
-import SearchObject from "../../common/dto/search/SearchObject";
-import { forgotPassword, resetPassword } from "../../auth/authService";
+import SearchObject from "../../dto/search/SearchObject";
+import { forgotPassword, resetPassword } from "../../auth/AuthService";
 import { getMessageResponse, safeClone } from "../../LocalFunction";
 
 export default class UserStore {

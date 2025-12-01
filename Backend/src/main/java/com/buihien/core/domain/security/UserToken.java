@@ -7,11 +7,7 @@ import org.hibernate.annotations.SQLDelete;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tbl_user_token",
-        indexes = {
-                @Index(name = "idx_user_token_user_revoked", columnList = "user_id, revoked"),
-                @Index(name = "idx_user_token_refresh_revoked", columnList = "refresh_token, revoked")
-        })
+@Table(name = "tbl_user_token")
 @SQLDelete(sql = "UPDATE tbl_user_token SET voided = true WHERE id = ?")
 public class UserToken extends Auditable {
 
@@ -26,7 +22,7 @@ public class UserToken extends Auditable {
     private String accessToken;
 
     @Column(name = "refresh_token", columnDefinition = "TEXT")
-    private String refreshToken; 
+    private String refreshToken;
 
     @Column(name = "reset_token", columnDefinition = "TEXT")
     private String resetToken;
@@ -36,6 +32,9 @@ public class UserToken extends Auditable {
 
     @Column(name = "revoked")
     private Boolean revoked = Boolean.FALSE; // token is invalidated or not
+
+    @Column(name = "revoked_time")
+    private LocalDateTime revokedTime;
 
     @Column(name = "device_info")
     private String deviceInfo; // Chrome on Windows, Safari iOS...
@@ -113,5 +112,13 @@ public class UserToken extends Auditable {
 
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
+    }
+
+    public LocalDateTime getRevokedTime() {
+        return revokedTime;
+    }
+
+    public void setRevokedTime(LocalDateTime revokedTime) {
+        this.revokedTime = revokedTime;
     }
 }

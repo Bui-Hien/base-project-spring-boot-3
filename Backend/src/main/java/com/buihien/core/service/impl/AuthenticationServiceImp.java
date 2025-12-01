@@ -184,7 +184,7 @@ public class AuthenticationServiceImp implements AuthenticationService {
         //vo hien hoa token
         userToken.setRevoked(true);
         userTokenRepository.save(userToken);
-        
+
         // Cập nhật mật khẩu
         entity.setPassword(passwordEncoder.encode(request.getPassword()));
         entity.setIsActive(true);
@@ -224,6 +224,30 @@ public class AuthenticationServiceImp implements AuthenticationService {
             throw new InvalidDataException("Mật khẩu cũ chính xác");
         }
     }
+
+    @Override
+    public void removeToken(TokenResponseDto dto, HttpServletRequest request) {
+        if (dto == null || !StringUtils.hasText(dto.getRefreshToken())) {
+            throw new ForbiddenException("Phiên đăng nhập không hợp lệ.");
+        }
+
+        String refreshToken = dto.getRefreshToken().trim();
+
+        UserToken userToken = userTokenRepository
+                .findByRefreshToken(refreshToken, LocalDateTime.now())
+                .orElseThrow(() ->
+                        new ForbiddenException("Phiên đăng nhập không hợp lệ.")
+                );
+
+        userToken.setDeviceInfo(request.getHeader("User-Agent"));
+        userToken.setIpAddress(getClientIp(request));
+
+        userToken.setRevoked(Boolean.TRUE);
+        userToken.setRevokedTime(LocalDateTime.now());
+
+        userTokenRepository.save(userToken);
+    }
+
 
     private String getClientIp(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");

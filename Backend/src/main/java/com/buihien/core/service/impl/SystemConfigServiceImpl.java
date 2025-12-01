@@ -101,7 +101,7 @@ public class SystemConfigServiceImpl extends GenericServiceImpl<SystemConfig, Sy
 
     @Override
     public StringBuilder builderWhereClause(SearchDto dto) {
-        StringBuilder whereClause = new StringBuilder();
+        StringBuilder whereClause = new StringBuilder(" WHERE 1=1 ");
 
         if (dto.getVoided() == null || !dto.getVoided()) {
             whereClause.append(" AND entity.voided = false ");
@@ -110,7 +110,7 @@ public class SystemConfigServiceImpl extends GenericServiceImpl<SystemConfig, Sy
         }
 
         if (dto.getKeyword() != null && StringUtils.hasText(dto.getKeyword())) {
-            whereClause.append(" AND (LOWER(entity.name) LIKE LOWER(:text) OR LOWER(entity.code) LIKE LOWER(:text) OR LOWER(entity.description) LIKE LOWER(:text)) ");
+            whereClause.append(" AND (LOWER(entity.key) LIKE LOWER(:text) OR LOWER(entity.value) LIKE LOWER(:text) OR LOWER(entity.description) LIKE LOWER(:text)) ");
         }
 
         if (dto.getFromDate() != null) {

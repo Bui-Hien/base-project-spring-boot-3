@@ -8,12 +8,8 @@ import { observer } from "mobx-react-lite";
 import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from "@mui/icons-material/Close";
 import CommonTextField from "../../../common/Form/CommonTextField";
-import CommonPagingAutocomplete from "../../../common/Form/CommonPagingAutocomplete";
-import { pagingBank } from "../../Bank/BankService";
 import PreviewFileViewer from "../../../common/UploadFile/PreviewFileViewer";
 import FileUpload from "../../../common/UploadFile/FileUpload";
-import { pagingAccountCategory } from "../../AccountCategory/AccountCategoryService";
-import { pagingRole } from "../UserService";
 import { useStore } from "../../../stores";
 import { API_ENDPOINT } from "../../../appConfig";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
@@ -159,13 +155,13 @@ function UserInfoTab () {
                                 <h3 className="text-base font-semibold mb-3 text-gray-700">Thông tin ngân hàng</h3>
                               </div>
 
-                              <div className="col-span-12 md:col-span-4">
-                                <CommonPagingAutocomplete
-                                    label="Ngân hàng"
-                                    name="bank"
-                                    api={pagingBank}
-                                />
-                              </div>
+                              {/*<div className="col-span-12 md:col-span-4">*/}
+                              {/*  <CommonPagingAutocomplete*/}
+                              {/*      label="Ngân hàng"*/}
+                              {/*      name="bank"*/}
+                              {/*      api={pagingBank}*/}
+                              {/*  />*/}
+                              {/*</div>*/}
 
                               <div className="col-span-12 md:col-span-4">
                                 <CommonTextField
@@ -204,26 +200,26 @@ function UserInfoTab () {
                                 <h3 className="text-base font-semibold mb-3 text-gray-700">Phân quyền</h3>
                               </div>
 
-                              <div className="col-span-12">
-                                <CommonPagingAutocomplete
-                                    label="Danh mục tài khoản được bán"
-                                    name="accountCategories"
-                                    api={pagingAccountCategory}
-                                    multiple
-                                    disabled
-                                />
-                              </div>
+                              {/*<div className="col-span-12">*/}
+                              {/*  <CommonPagingAutocomplete*/}
+                              {/*      label="Danh mục tài khoản được bán"*/}
+                              {/*      name="accountCategories"*/}
+                              {/*      api={pagingAccountCategory}*/}
+                              {/*      multiple*/}
+                              {/*      disabled*/}
+                              {/*  />*/}
+                              {/*</div>*/}
                             </>
                         )}
-                        <div className="col-span-12">
-                          <CommonPagingAutocomplete
-                              label="Quyền hạn người dùng"
-                              name="roles"
-                              api={pagingRole}
-                              disabled
-                              multiple
-                          />
-                        </div>
+                        {/*<div className="col-span-12">*/}
+                        {/*  <CommonPagingAutocomplete*/}
+                        {/*      label="Quyền hạn người dùng"*/}
+                        {/*      name="roles"*/}
+                        {/*      api={pagingRole}*/}
+                        {/*      disabled*/}
+                        {/*      multiple*/}
+                        {/*  />*/}
+                        {/*</div>*/}
                       </div>
                     </div>
                   </div>

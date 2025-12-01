@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Hls from "hls.js";
 import { API_ENDPOINT } from "../appConfig";
-import { refreshToken } from "../auth/authService";
+import { refreshToken } from "../auth/AuthService";
 
 const VideoPlayer = ({ videoId, width = "full", height = "60" }) => {
   const videoRef = useRef(null);

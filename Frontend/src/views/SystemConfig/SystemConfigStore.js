@@ -1,17 +1,16 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { getAllSystemConfig, getSystemConfigById, pagingSystemConfig, saveSystemConfig, } from "./SystemConfigService";
+import { getAllSystemConfig, getSystemConfigById, pagingSystemConfig, saveSystemConfig, } from "../../service/SystemConfigService";
 import { toast } from "react-toastify";
 import i18n from "i18next";
-import SearchObject from "../../common/dto/search/SearchObject";
-import SystemConfigDto from "../../common/dto/SystemConfigDto";
+import SystemConfigDto from "../../dto/SystemConfigDto";
 import { ValueType } from "../../LocalConstants";
 import LocalStorageService from "../../service/LocalStorageService";
 import { getMessageResponse, safeClone } from "../../LocalFunction";
+import SearchObject from "../../dto/search/SearchObject";
 
 export default class SystemConfigStore {
   intactSearchObject = {... new SearchObject ()};
   searchObject = safeClone (this.intactSearchObject);
-
   totalElements = 0;
   totalPages = 0;
   dataList = [];

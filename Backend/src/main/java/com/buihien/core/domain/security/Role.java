@@ -23,6 +23,7 @@ public class Role extends Auditable {
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
     @Where(clause = "voided = false")
+    @OrderBy("createdAt")
     private Set<RolePermission> permissions;
 
     public Role() {

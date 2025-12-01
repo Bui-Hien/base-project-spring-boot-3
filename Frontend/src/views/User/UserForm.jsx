@@ -9,14 +9,6 @@ import CommonTextField from "../../common/Form/CommonTextField";
 import { observer } from "mobx-react-lite";
 import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from "@mui/icons-material/Close";
-import CommonPagingAutocomplete from "../../common/Form/CommonPagingAutocomplete";
-import { pagingRole } from "./UserService";
-import CommonCheckBox from "../../common/Form/CommonCheckBox";
-import { pagingAccountCategory } from "../AccountCategory/AccountCategoryService";
-import { pagingBank } from "../Bank/BankService";
-import PreviewFileViewer from "../../common/UploadFile/PreviewFileViewer";
-import FileUpload from "../../common/UploadFile/FileUpload";
-import VideoUpload from "../../common/UploadFile/VideoUpload";
 
 function UserForm () {
   const {t} = useTranslation ();
@@ -106,111 +98,6 @@ function UserForm () {
                             label="Tên người dùng"
                             name="displayName"
                             required
-                        />
-                      </div>
-                      {!selectedRow?.id && (
-                          <>
-                            <div className="col-span-12 md:col-span-4">
-                              <CommonTextField
-                                  label="Mật khẩu"
-                                  name="password"
-                                  isPassword
-                                  required/>
-                            </div>
-                            <div className="col-span-12 md:col-span-4">
-                              <CommonTextField
-                                  label="Mật khẩu xác nhận"
-                                  name="confirmPassword"
-                                  isPassword
-                                  required/>
-                            </div>
-                          </>
-                      )}
-                      <div className="col-span-12 md:col-span-4">
-                        <CommonTextField
-                            label="Mail"
-                            name="email"
-                            required/>
-                      </div>
-                      <div className="col-span-12 md:col-span-4">
-                        <CommonPagingAutocomplete
-                            label="Ngân hàng"
-                            name="bank"
-                            api={pagingBank}
-                        />
-                      </div>
-                      <div className="col-span-12 md:col-span-4">
-                        <CommonTextField
-                            label="Tên người thụ hưởng"
-                            name="beneficiaryName"
-                            required={values?.bank?.id}
-                        />
-                      </div>
-                      <div className="col-span-12 md:col-span-4 flex gap-2">
-                        <div className="grow">
-                          <CommonTextField
-                              label="Số tài khoản ngân hàng"
-                              name="accountNumber"
-                              required={values?.bank?.id}
-                          />
-                        </div>
-                        <div className="flex gap-2 items-end flex-none">
-                          <PreviewFileViewer
-                              selectedFile={values?.bankQrCode}
-                              disabled={!values?.bankQrCode?.id}
-                              title={"Xem qr code"}
-                          />
-                          <FileUpload
-                              onUploadSuccess={(file) => {
-                                setFieldValue ("bankQrCode", file)
-                              }}
-                              title="Tải QR"
-                              multiple={false}
-                          />
-                        </div>
-                      </div>
-                      <div className="col-span-12 md:col-span-4">
-                        <CommonPagingAutocomplete
-                            label="Danh mục tài khoản được bán"
-                            name="accountCategories"
-                            api={pagingAccountCategory}
-                            multiple
-                        />
-                      </div>
-                      <div className="col-span-12 md:col-span-4">
-                        <CommonPagingAutocomplete
-                            label="Quyền hạn người dùng"
-                            name="roles"
-                            api={pagingRole}
-                            required
-                            multiple
-                        />
-                      </div>
-                      <div className="col-span-12 md:col-span-4">
-                        <CommonCheckBox
-                            alignPosition={"flex-end"}
-                            label="Khóa tài khoản người dùng"
-                            name="isEnabled"
-                        />
-                      </div>
-                      <div className="col-span-12 md:col-span-4 ">
-                        <CommonCheckBox
-                            alignPosition={"flex-end"}
-                            label="Active người dùng"
-                            name="isActive"
-                        />
-                        <VideoUpload
-                            maxSizeMB={20000}
-                            onUploadSuccess={(data)=>{
-                              console.log(data)
-                            }}
-                        />
-                      </div>
-                      <div className="col-span-12 md:col-span-4 ">
-                        <CommonCheckBox
-                            alignPosition={"flex-end"}
-                            label="Là tài khoản tin tưởng"
-                            name="isTrusted"
                         />
                       </div>
                     </div>

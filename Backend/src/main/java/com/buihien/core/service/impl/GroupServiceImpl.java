@@ -44,7 +44,7 @@ public class GroupServiceImpl extends GenericServiceImpl<Group, GroupDto, Search
 
     @Override
     protected GroupDto convertToDto(Group entity) {
-        return new GroupDto(entity);
+        return new GroupDto(entity, true);
     }
 
     @Override
@@ -138,7 +138,7 @@ public class GroupServiceImpl extends GenericServiceImpl<Group, GroupDto, Search
         int pageSize = (dto.getPageSize() == null || dto.getPageSize() < 10) ? 10 : dto.getPageSize();
 
         StringBuilder sqlCount = new StringBuilder("SELECT COUNT(entity.id) FROM Group entity WHERE (1=1) ");
-        StringBuilder sql = new StringBuilder("SELECT new com.buihien.core.dto.security.GroupDto(entity) FROM Group entity WHERE (1=1) ");
+        StringBuilder sql = new StringBuilder("SELECT new com.buihien.core.dto.security.GroupDto(entity, true) FROM Group entity WHERE (1=1) ");
 
         sql.append(builderWhereClause(dto));
         sqlCount.append(builderWhereClause(dto));

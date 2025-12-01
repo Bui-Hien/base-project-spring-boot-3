@@ -14,29 +14,39 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
     @Query(value = """
-                 (
+        (
             SELECT DISTINCT p.name
             FROM tbl_user u
-            LEFT JOIN tbl_user_role ur ON ur.user_id = u.id AND ur.voided = false
-            LEFT JOIN tbl_role r ON r.id = ur.role_id AND r.voided = false
-            LEFT JOIN tbl_role_permission rp ON rp.role_id = r.id AND rp.voided = false
-            LEFT JOIN tbl_permission p ON p.id = rp.permission_id AND p.voided = false
+            LEFT JOIN tbl_user_role ur 
+                ON ur.user_id = u.id AND ur.voided = false
+            LEFT JOIN tbl_role r 
+                ON r.id = ur.role_id AND r.voided = false
+            LEFT JOIN tbl_role_permission rp 
+                ON rp.role_id = r.id AND rp.voided = false
+            LEFT JOIN tbl_permission p 
+                ON p.id = rp.permission_id AND p.voided = false
             WHERE u.username = :username
         )
-        UNION
+        UNION ALL
         (
             SELECT DISTINCT gp.name
             FROM tbl_user u
-            LEFT JOIN tbl_group_user gu ON gu.user_id = u.id AND gu.voided = false
-            LEFT JOIN tbl_group g ON g.id = gu.group_id AND g.voided = false
-            LEFT JOIN tbl_group_role gr ON gr.group_id = g.id AND gr.voided = false
-            LEFT JOIN tbl_role grr ON grr.id = gr.role_id AND grr.voided = false
-            LEFT JOIN tbl_role_permission grp ON grp.role_id = grr.id AND grp.voided = false
-            LEFT JOIN tbl_permission gp ON gp.id = grp.permission_id AND gp.voided = false
+            LEFT JOIN tbl_group_user gu 
+                ON gu.user_id = u.id AND gu.voided = false
+            LEFT JOIN tbl_group g 
+                ON g.id = gu.group_id AND g.voided = false
+            LEFT JOIN tbl_group_role gr 
+                ON gr.group_id = g.id AND gr.voided = false
+            LEFT JOIN tbl_role grr 
+                ON grr.id = gr.role_id AND grr.voided = false
+            LEFT JOIN tbl_role_permission grp 
+                ON grp.role_id = grr.id AND grp.voided = false
+            LEFT JOIN tbl_permission gp 
+                ON gp.id = grp.permission_id AND gp.voided = false
             WHERE u.username = :username
         )
-            """, nativeQuery = true)
-    List<String> findAllPermissionsNative(@Param("username") String username);
+        """, nativeQuery = true)
+    Set<String> findAllPermissionsNative(@Param("username") String username);
 
     // Tìm user cơ bản (không load permissions) - dùng cho các API thông thường
     @Query("SELECT u FROM User u WHERE u.username = :username AND u.voided = false")

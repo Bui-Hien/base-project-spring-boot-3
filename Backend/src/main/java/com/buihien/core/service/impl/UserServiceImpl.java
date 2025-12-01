@@ -29,7 +29,7 @@ import org.springframework.transaction.support.TransactionSynchronizationAdapter
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -120,27 +120,7 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserDto, UserSearc
         return username -> {
             User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new NotFoundException("Không tìm thấy user: " + username));
-
-            List<String> permissionNames = HashCachePermission.get(username);
-            if (permissionNames == null) {
-                permissionNames = userRepository.findAllPermissionsNative(username);
-                if (userRepository.countUserByRoleUserName(ROLE_SYSTEM_ADMIN, username) > 0) {
-                    if (permissionNames == null) {
-                        permissionNames = new ArrayList<>();
-                    }
-                    if (!permissionNames.contains(ROLE_SYSTEM_ADMIN)) {
-                        permissionNames.add(ROLE_SYSTEM_ADMIN);
-                    }
-                }
-                HashCachePermission.put(username, permissionNames);
-            }
-
-            Set<GrantedAuthority> authorities = permissionNames.stream()
-                    .filter(StringUtils::hasText)
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toSet());
-
-            user.setAuthorities(authorities);
+            loadPermission(user);
             return user;
         };
     }
@@ -212,24 +192,7 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserDto, UserSearc
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof User contextUser) {
             try {
-                // Load permissions từ cache / DB
-                List<String> permissionNames = HashCachePermission.get(contextUser.getUsername());
-                if (permissionNames == null) {
-                    permissionNames = userRepository.findAllPermissionsNative(contextUser.getUsername());
-                    if (userRepository.countUserByRoleUserName(ROLE_SYSTEM_ADMIN, contextUser.getUsername()) > 0) {
-                        if (permissionNames == null) {
-                            permissionNames = new ArrayList<>();
-                        }
-                        permissionNames.add(ROLE_SYSTEM_ADMIN);
-                    }
-                    HashCachePermission.put(contextUser.getUsername(), permissionNames);
-                }
-                Set<GrantedAuthority> authorities = permissionNames.stream()
-                        .filter(StringUtils::hasText)
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toSet());
-
-                contextUser.setAuthorities(authorities);
+                loadPermission(contextUser);
                 return contextUser;
             } catch (Exception e) {
                 log.error("Failed to reload permissions for current user", e);
@@ -238,6 +201,37 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserDto, UserSearc
         }
         return null;
     }
+
+    private void loadPermission(User user) {
+
+        Set<String> permissionNames = HashCachePermission.get(user.getUsername());
+
+        if (permissionNames == null) {
+            permissionNames = new HashSet<>(userRepository.findAllPermissionsNative(user.getUsername()));
+        }
+
+        if (permissionNames == null) {
+            permissionNames = new HashSet<>();
+        }
+
+        permissionNames = permissionNames.stream()
+                .filter(StringUtils::hasText)
+                .map(String::trim)
+                .collect(Collectors.toSet());
+
+        if (userRepository.countUserByRoleUserName(ROLE_SYSTEM_ADMIN, user.getUsername()) > 0) {
+            permissionNames.add(ROLE_SYSTEM_ADMIN);
+        }
+
+        HashCachePermission.put(user.getUsername(), permissionNames);
+
+        Set<GrantedAuthority> authorities = permissionNames.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toSet());
+
+        user.setAuthorities(authorities);
+    }
+
 
     @Override
     public User getCurrentUser() {

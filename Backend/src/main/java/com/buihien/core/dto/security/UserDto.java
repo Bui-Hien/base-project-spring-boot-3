@@ -6,6 +6,7 @@ import com.buihien.core.domain.security.UserRole;
 import com.buihien.core.dto.AuditableDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class UserDto extends AuditableDto {
     private String confirmPassword;
     private List<RoleDto> roles;
     private List<GroupDto> groups;
+    private List<String> permissions;
 
     public UserDto() {
     }
@@ -43,6 +45,12 @@ public class UserDto extends AuditableDto {
         this.totalLoginFailures = entity.getTotalLoginFailures();
         this.lastLoginFailures = entity.getLastLoginFailures();
         this.username = entity.getUsername();
+        if (entity.getAuthorities() != null && !entity.getAuthorities().isEmpty()) {
+            this.permissions = new ArrayList<>();
+            for (GrantedAuthority item : entity.getAuthorities()) {
+                this.permissions.add(item.getAuthority());
+            }
+        }
     }
 
     public UserDto(User entity, Boolean isGetFull) {
@@ -166,5 +174,13 @@ public class UserDto extends AuditableDto {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public List<String> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<String> permissions) {
+        this.permissions = permissions;
     }
 }

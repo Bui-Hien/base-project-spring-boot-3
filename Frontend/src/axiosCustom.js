@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { refreshToken } from "./auth/authService";
+import { refreshToken } from "./auth/AuthService";
 import { API_ENDPOINT, LOGIN_PAGE } from "./appConfig";
 import { store } from "./stores";
 import { convertDates, removeEmptyFields } from "./LocalFunction";

@@ -4,10 +4,6 @@ import { observer } from "mobx-react-lite";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import { Button, ButtonGroup, Collapse } from "@mui/material";
-import CommonPagingAutocomplete from "../../common/Form/CommonPagingAutocomplete";
-import { pagingRole } from "./UserService";
-import { pagingVipLevel } from "../VipLevel/VipLevelService";
-import { pagingAccountCategory } from "../AccountCategory/AccountCategoryService";
 import CommonSelectInput from "../../common/Form/CommonSelectInput";
 
 function UserFilter () {
@@ -32,27 +28,27 @@ function UserFilter () {
           {/* Khối lọc */}
           <div className="grid grid-cols-12 gap-4 justify-start">
             <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
-              <CommonPagingAutocomplete
-                  label="Danh mục tài khoản"
-                  name="accountCategories"
-                  api={pagingAccountCategory}
-                  multiple
-              />
-            </div>
-            <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
-              <CommonPagingAutocomplete
-                  label="Vip"
-                  name="vipLevel"
-                  api={pagingVipLevel}
-              />
-            </div>
-            <div className="col-span-12 sm:col-span-6md:col-span-4 lg:col-span-3">
-              <CommonPagingAutocomplete
-                  label="Quyền hạn"
-                  name="roles"
-                  api={pagingRole}
-                  multiple
-              />
+              {/*  <CommonPagingAutocomplete*/}
+              {/*      label="Danh mục tài khoản"*/}
+              {/*      name="accountCategories"*/}
+              {/*      api={pagingAccountCategory}*/}
+              {/*      multiple*/}
+              {/*  />*/}
+              {/*</div>*/}
+              {/*<div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">*/}
+              {/*  <CommonPagingAutocomplete*/}
+              {/*      label="Vip"*/}
+              {/*      name="vipLevel"*/}
+              {/*      api={pagingVipLevel}*/}
+              {/*  />*/}
+              {/*</div>*/}
+              {/*<div className="col-span-12 sm:col-span-6md:col-span-4 lg:col-span-3">*/}
+              {/*  <CommonPagingAutocomplete*/}
+              {/*      label="Quyền hạn"*/}
+              {/*      name="roles"*/}
+              {/*      api={pagingRole}*/}
+              {/*      multiple*/}
+              {/*  />*/}
             </div>
             <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
               <CommonSelectInput
@@ -61,9 +57,9 @@ function UserFilter () {
                   name="isTrusted"
                   options={
                     [
-                      { value: -1, name: "Tất cả tài khoản" },
-                      { value: true, name: "Tài khoản tin cậy" },
-                      { value: false, name: "Tài khoản thông thường" }
+                      {value:-1, name:"Tất cả tài khoản"},
+                      {value:true, name:"Tài khoản tin cậy"},
+                      {value:false, name:"Tài khoản thông thường"}
                     ]}
               />
             </div>

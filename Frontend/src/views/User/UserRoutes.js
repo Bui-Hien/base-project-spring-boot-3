@@ -13,7 +13,7 @@ const UserRoutes = [
     path:ConstantList.ROOT_PATH + "admin/system-user",
     exact:true,
     component:ViewComponent,
-    auth:[SystemRole.ROLE_ADMIN],
+    // auth:[SystemRole.ROLE_ADMIN],
   },
   {
     path:ConstantList.RESET_PASSWORD,
@@ -34,7 +34,7 @@ const UserRoutes = [
     path:ConstantList.PROFILE,
     exact:true,
     component:ViewComponentProfile,
-    auth:[SystemRole.ROLE_USER, SystemRole.ROLE_SELLER, SystemRole.ROLE_MANAGER, SystemRole.ROLE_ADMIN],
+    // auth:[SystemRole.ROLE_USER, SystemRole.ROLE_SELLER, SystemRole.ROLE_MANAGER, SystemRole.ROLE_ADMIN],
   },
 ];
 
