@@ -2,6 +2,7 @@ package com.buihien.core.dto.security;
 
 import com.buihien.core.domain.security.GroupUser;
 import com.buihien.core.domain.security.User;
+import com.buihien.core.domain.security.UserPermission;
 import com.buihien.core.domain.security.UserRole;
 import com.buihien.core.dto.AuditableDto;
 import jakarta.validation.Valid;
@@ -14,9 +15,9 @@ import java.util.List;
 
 @Valid
 public class UserDto extends AuditableDto {
-    private LocalDateTime isAccountNonExpired;//Thời gian hết hạn của tài khoản
+    private LocalDateTime accountNonExpired;//Thời gian hết hạn của tài khoản
     private Boolean isAccountNonLocked;// true  -> account user có thể login
-    private LocalDateTime isCredentialsNonExpired;//thời gian hợp lệ của pass ví dụ xx ngày không đăng nhập được
+    private LocalDateTime credentialsNonExpired;//thời gian hợp lệ của pass ví dụ xx ngày không đăng nhập được
     private Boolean isEnabled;//active qua mail, true  -> account enabled, user có thể login
     private Boolean isActive;//sai mật khẩu nhiều lần khóa,  true  -> account enabled, user có thể login
     private LocalDateTime lastLoginTime; // Thời gian login gần nhất
@@ -28,7 +29,8 @@ public class UserDto extends AuditableDto {
     private String confirmPassword;
     private List<RoleDto> roles;
     private List<GroupDto> groups;
-    private List<String> permissions;
+    private List<PermissionDto> permissions;
+    private List<String> authorities;
 
     public UserDto() {
     }
@@ -36,9 +38,9 @@ public class UserDto extends AuditableDto {
     public UserDto(User entity) {
         super(entity);
         if (entity == null) return;
-        this.isAccountNonExpired = entity.getIsAccountNonExpired();
+        this.accountNonExpired = entity.getAccountNonExpired();
         this.isAccountNonLocked = entity.getIsAccountNonLocked();
-        this.isCredentialsNonExpired = entity.getIsCredentialsNonExpired();
+        this.credentialsNonExpired = entity.getCredentialsNonExpired();
         this.isEnabled = entity.getIsEnabled();
         this.isActive = entity.getIsActive();
         this.lastLoginTime = entity.getLastLoginTime();
@@ -46,9 +48,9 @@ public class UserDto extends AuditableDto {
         this.lastLoginFailures = entity.getLastLoginFailures();
         this.username = entity.getUsername();
         if (entity.getAuthorities() != null && !entity.getAuthorities().isEmpty()) {
-            this.permissions = new ArrayList<>();
-            for (GrantedAuthority item : entity.getAuthorities()) {
-                this.permissions.add(item.getAuthority());
+            this.authorities = new ArrayList<>();
+            for (GrantedAuthority authority : entity.getAuthorities()) {
+                this.authorities.add(authority.getAuthority());
             }
         }
     }
@@ -68,6 +70,12 @@ public class UserDto extends AuditableDto {
                 this.groups.add(new GroupDto(group.getGroup()));
             }
         }
+        if (entity.getPermissions() != null && !entity.getPermissions().isEmpty()) {
+            this.permissions = new ArrayList<>();
+            for (UserPermission permission : entity.getPermissions()) {
+                this.permissions.add(new PermissionDto(permission.getPermission()));
+            }
+        }
     }
 
     public String getPassword() {
@@ -78,14 +86,12 @@ public class UserDto extends AuditableDto {
         return this.username;
     }
 
-    // ==================== Getters & Setters ====================
-
-    public LocalDateTime getIsAccountNonExpired() {
-        return isAccountNonExpired;
+    public LocalDateTime getAccountNonExpired() {
+        return accountNonExpired;
     }
 
-    public void setIsAccountNonExpired(LocalDateTime isAccountNonExpired) {
-        this.isAccountNonExpired = isAccountNonExpired;
+    public void setAccountNonExpired(LocalDateTime accountNonExpired) {
+        this.accountNonExpired = accountNonExpired;
     }
 
     public Boolean getIsAccountNonLocked() {
@@ -96,12 +102,12 @@ public class UserDto extends AuditableDto {
         this.isAccountNonLocked = isAccountNonLocked;
     }
 
-    public LocalDateTime getIsCredentialsNonExpired() {
-        return isCredentialsNonExpired;
+    public LocalDateTime getCredentialsNonExpired() {
+        return credentialsNonExpired;
     }
 
-    public void setIsCredentialsNonExpired(LocalDateTime isCredentialsNonExpired) {
-        this.isCredentialsNonExpired = isCredentialsNonExpired;
+    public void setCredentialsNonExpired(LocalDateTime credentialsNonExpired) {
+        this.credentialsNonExpired = credentialsNonExpired;
     }
 
     public Boolean getIsEnabled() {
@@ -176,11 +182,19 @@ public class UserDto extends AuditableDto {
         this.confirmPassword = confirmPassword;
     }
 
-    public List<String> getPermissions() {
+    public List<PermissionDto> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(List<String> permissions) {
+    public void setPermissions(List<PermissionDto> permissions) {
         this.permissions = permissions;
+    }
+
+    public List<String> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(List<String> authorities) {
+        this.authorities = authorities;
     }
 }

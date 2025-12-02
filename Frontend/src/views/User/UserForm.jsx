@@ -9,6 +9,12 @@ import CommonTextField from "../../common/Form/CommonTextField";
 import { observer } from "mobx-react-lite";
 import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from "@mui/icons-material/Close";
+import CommonCheckBox from "../../common/Form/CommonCheckBox";
+import CommonPagingAutocomplete from "../../common/Form/CommonPagingAutocomplete";
+import { pagingRole } from "../../service/RoleService";
+import { pagingGroup } from "../../service/GroupService";
+import { pagingPermission } from "../../service/PermissionService";
+import CommonDateTimePicker from "../../common/Form/CommonDateTimePicker";
 
 function UserForm () {
   const {t} = useTranslation ();
@@ -23,7 +29,7 @@ function UserForm () {
 
   const validationSchema = (isRequitedPass) =>
       Yup.object ({
-        displayName:Yup.string ().required (t ("validation.required")),
+        username:Yup.string ().email ("Tên đăng nhập không đúng định dạng (Gmail)").required (t ("validation.required")),
 
         password:isRequitedPass
             ? Yup.string ().required (t ("validation.required"))
@@ -41,31 +47,14 @@ function UserForm () {
         isEnabled:Yup.bool ().notRequired (),
         isActive:Yup.bool ().notRequired (),
 
-        email:Yup.string ()
-            .required (t ("validation.required"))
-            .email (t ("Email không hợp lệ")),
-
-        bank:Yup.object ().nullable ().notRequired (),
-
-        beneficiaryName:Yup.string ().when ("bank", {
-          is:(val) => !!val, // nếu bank có giá trị
-          then:(schema) => schema.required (t ("validation.required")),
-          otherwise:(schema) => schema.notRequired (),
-        }),
-
-        accountNumber:Yup.string ().when ("bank", {
-          is:(val) => !!val,
-          then:(schema) => schema.required (t ("validation.required")),
-          otherwise:(schema) => schema.notRequired (),
-        }),
-
-        accountCategories:Yup.array ()
-            .of (Yup.object ())
+        roles:Yup.array ()
             .notRequired (),
 
-        roles:Yup.array ()
-            .of (Yup.object ())
-            .min (1, t ("validation.required")),
+        groups:Yup.array ()
+            .notRequired (),
+
+        permissions:Yup.array ()
+            .notRequired (),
       });
 
   async function handleSaveForm (values) {
@@ -74,7 +63,7 @@ function UserForm () {
 
   return (
       <CommonPopupV2
-          size="lg"
+          size="md"
           scroll={"body"}
           open={openCreateEditPopup}
           noDialogContent
@@ -95,9 +84,77 @@ function UserForm () {
                     <div className={"grid grid-cols-12 gap-2"}>
                       <div className="col-span-12 md:col-span-4">
                         <CommonTextField
-                            label="Tên người dùng"
-                            name="displayName"
+                            label="Tên đăng nhập"
+                            name="username"
                             required
+                        />
+                      </div>
+                      <div className="col-span-12 md:col-span-4">
+                        <CommonDateTimePicker
+                            label="Thời gian tài khoản hết hạn"
+                            name="accountNonExpired"
+                        />
+                      </div>
+                      <div className="col-span-12 md:col-span-4">
+                        <CommonDateTimePicker
+                            label="Ngày tài khoản cần đổi mật khẩu"
+                            name="credentialsNonExpired"
+                        />
+                      </div>
+                      <div className="col-span-12 md:col-span-4">
+                        <CommonCheckBox
+                            label="Block người dùng"
+                            name="isAccountNonLocked"
+                        />
+                      </div>
+                      <div className="col-span-12 md:col-span-4">
+                        <CommonCheckBox
+                            label="Kích hoạt tài khoản"
+                            name="isEnabled"
+                        />
+                      </div>
+                      <div className="col-span-12 md:col-span-4">
+                        <CommonCheckBox
+                            label="Tài khoản bị tạm khóa"
+                            name="isActive"
+                        />
+                      </div>
+                      <div className="col-span-12 md:col-span-4">
+                        <CommonTextField
+                            label="Mật khẩu"
+                            name="password"
+                            required={!selectedRow?.id}
+                        />
+                      </div>
+                      <div className="col-span-12 md:col-span-4">
+                        <CommonTextField
+                            label="Mật khẩu xác nhận"
+                            name="confirmPassword"
+                            required={!selectedRow?.id}
+                        />
+                      </div>
+                      <div className="col-span-12">
+                        <CommonPagingAutocomplete
+                            label="Vai trò"
+                            name="roles"
+                            multiple
+                            api={pagingRole}
+                        />
+                      </div>
+                      <div className="col-span-12">
+                        <CommonPagingAutocomplete
+                            label="Nhóm quyền"
+                            name="groups"
+                            multiple
+                            api={pagingGroup}
+                        />
+                      </div>
+                      <div className="col-span-12">
+                        <CommonPagingAutocomplete
+                            label="Quyền hạn"
+                            name="permissions"
+                            multiple
+                            api={pagingPermission}
                         />
                       </div>
                     </div>

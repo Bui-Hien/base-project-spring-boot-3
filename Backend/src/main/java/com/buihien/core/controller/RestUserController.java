@@ -22,35 +22,35 @@ public class RestUserController {
     private UserService userService;
 
     @GetMapping("/get-current-user")
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).USER_VIEW)")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).USER_VIEW)")
     public ResponseData<UserDto> getCurrentUser() {
         UserDto result = userService.getCurrentUserDto();
         return new ResponseData<>(HttpStatus.OK.value(), "Lấy thông tin người dùng hiện tại thành công", result);
     }
 
     @PostMapping("/save-or-update")
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).USER_WRITE)")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).USER_WRITE)")
     public ResponseData<UserDto> saveOrUpdate(@Valid @RequestBody UserDto dto) {
         UserDto response = userService.saveOrUpdate(dto);
         return new ResponseData<>(dto.getId() == null ? HttpStatus.CREATED.value() : HttpStatus.ACCEPTED.value(), dto.getId() == null ? "Thêm mới người dùng thành công" : "Chỉnh sửa bản người dùng thành công", response);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).USER_DELETE)")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).USER_DELETE)")
     public ResponseData<Void> deleteById(@PathVariable UUID id) {
         userService.deleteById(id);
         return new ResponseData<>(HttpStatus.NO_CONTENT.value(), "Xóa người dùng thành công");
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).USER_VIEW)")
+    @GetMapping("/{id:^[0-9a-fA-F\\-]{36}$}")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).USER_VIEW)")
     public ResponseData<UserDto> getById(@PathVariable UUID id) {
         UserDto response = userService.getById(id);
         return new ResponseData<>(HttpStatus.OK.value(), "Lấy người dùng thành công", response);
     }
 
     @PostMapping("/paging-search")
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).USER_VIEW)")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).USER_VIEW)")
     public ResponseData<Page<UserDto>> pagingSearch(@Valid @RequestBody UserSearchDto dto) {
         Page<UserDto> result = userService.pagingSearch(dto);
         return new ResponseData<>(HttpStatus.OK.value(), "Lấy danh sách người dùng thành công", result);

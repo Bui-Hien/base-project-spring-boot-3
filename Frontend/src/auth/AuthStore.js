@@ -21,9 +21,8 @@ export default class AuthStore {
       const {data} = await getCurrentUser ();
       runInAction (() => {
         this.currentUser = data.data || null;
-        this.roles = data.data?.permissions || [];
+        this.roles = data.data?.authorities || [];
       });
-      console.log (this.roles)
       return this.currentUser;
     } catch (error) {
       console.error (error);

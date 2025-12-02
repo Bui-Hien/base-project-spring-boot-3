@@ -5,6 +5,7 @@ import { styled } from "@mui/material/styles";
 
 const StyledFormControlLabel = styled (FormControlLabel) (({theme}) => ({
   margin:0,
+  width:"100%",
   "& .MuiIconButton-root":{
     padding:8,
   },
@@ -12,6 +13,9 @@ const StyledFormControlLabel = styled (FormControlLabel) (({theme}) => ({
     opacity:0.6,
     pointerEvents:"none",
   },
+  "& .MuiButtonBase-root":{
+    marginLeft:-9
+  }
 }));
 
 const CommonCheckBox = ({value = true, ... props}, ref) => (
@@ -105,8 +109,6 @@ const Component = forwardRef ((props, ref) => {
     size:"small",
   };
 
-  const control = type === "radio"? <Radio/> : <Checkbox/>;
-
   return (
       <FormGroup
           sx={{
@@ -116,10 +118,10 @@ const Component = forwardRef ((props, ref) => {
             height:"100%",
             ... style,
           }}
-          className={className}
+          className={`${className} !flex !justify-end !items-center`}
       >
         <StyledFormControlLabel
-            className={disabled? "read-only" : ""}
+            className={`flex items-end ${disabled? "read-only" : ""}`}
             control={
               type === "radio"? (
                   <Radio {... commonProps} value={value}/>

@@ -23,7 +23,7 @@ public class RestPermissionController {
     private PermissionService permissionService;
 
     @PostMapping("/paging-search")
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).GROUP_VIEW)")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).GROUP_VIEW)")
     public ResponseData<Page<PermissionDto>> pagingSearch(@Valid @RequestBody SearchDto dto) {
         Page<PermissionDto> result = permissionService.pagingSearch(dto);
         return new ResponseData<>(HttpStatus.OK.value(), "Lấy danh sách quền hạn thành công", result);

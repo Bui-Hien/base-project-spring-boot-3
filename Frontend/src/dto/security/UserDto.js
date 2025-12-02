@@ -1,9 +1,9 @@
 import AuditableDto from "../AuditableDto";
 
 export default class UserDto extends AuditableDto {
-  isAccountNonExpired = null;
+  accountNonExpired = null;
   isAccountNonLocked = null;
-  isCredentialsNonExpired = null;
+  credentialsNonExpired = null;
   isEnabled = null;
   isActive = null;
   lastLoginTime = null;
@@ -14,4 +14,5 @@ export default class UserDto extends AuditableDto {
   confirmPassword = null;
   roles = [];
   groups = [];
+  permissions = [];
 }

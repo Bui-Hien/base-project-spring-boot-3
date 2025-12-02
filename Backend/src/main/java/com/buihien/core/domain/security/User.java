@@ -18,20 +18,20 @@ import java.util.Set;
 @Entity
 @SQLDelete(sql = "UPDATE tbl_user SET voided = true WHERE id = ?")
 public class User extends Auditable implements UserDetails {
-    @Column(name = "is_account_non_expired")
-    private LocalDateTime isAccountNonExpired;
+    @Column(name = "account_non_expired")
+    private LocalDateTime accountNonExpired;
 
     @Column(name = "is_account_non_locked")
     private Boolean isAccountNonLocked = Boolean.TRUE;
 
-    @Column(name = "is_credentials_non_expired")
-    private LocalDateTime isCredentialsNonExpired;
+    @Column(name = "credentials_non_expired")
+    private LocalDateTime credentialsNonExpired;
 
     @Column(name = "is_enabled")
     private Boolean isEnabled = Boolean.FALSE;//active qua mail, true  -> account enabled, user có thể login
 
     @Column(name = "is_active")
-    private Boolean isActive = Boolean.TRUE;//sai mật khẩu nhiều lần khóa,  true  -> account enabled, user có thể login
+    private Boolean isActive = Boolean.FALSE;//sai mật khẩu nhiều lần khóa,  FALSE  -> account enabled, user có thể login
 
     @Column(name = "last_login_time")
     private LocalDateTime lastLoginTime; // Thời gian login gần nhất
@@ -57,6 +57,11 @@ public class User extends Auditable implements UserDetails {
     @Where(clause = "voided = false")
     @OrderBy("createdAt")
     private Set<GroupUser> groups;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Where(clause = "voided = false")
+    @OrderBy("createdAt")
+    private Set<UserPermission> permissions;
 
     public User() {
         super();
@@ -97,7 +102,7 @@ public class User extends Auditable implements UserDetails {
         // true  -> account còn hạn, user có thể login bình thường
         // false -> account hết hạn, Spring Security throw AccountExpiredException và chặn login
 
-        return this.isAccountNonExpired == null || this.isAccountNonExpired.isAfter(LocalDateTime.now());
+        return this.accountNonExpired == null || this.accountNonExpired.isAfter(LocalDateTime.now());
     }
 
     @Override
@@ -113,7 +118,7 @@ public class User extends Auditable implements UserDetails {
         // Kiểm tra xem credentials (password) còn hợp lệ hay đã expired
         // true  -> password còn hợp lệ, user có thể login
         // false -> password expired, Spring Security throw CredentialsExpiredException, login bị chặn
-        return this.isCredentialsNonExpired == null || this.isCredentialsNonExpired.isAfter(LocalDateTime.now());
+        return this.credentialsNonExpired == null || this.credentialsNonExpired.isAfter(LocalDateTime.now());
     }
 
     @Override
@@ -126,28 +131,29 @@ public class User extends Auditable implements UserDetails {
 
     // ==================== Getters & Setters ====================
 
-    public LocalDateTime getIsAccountNonExpired() {
-        return isAccountNonExpired;
+
+    public LocalDateTime getCredentialsNonExpired() {
+        return credentialsNonExpired;
     }
 
-    public void setIsAccountNonExpired(LocalDateTime isAccountNonExpired) {
-        this.isAccountNonExpired = isAccountNonExpired;
+    public void setCredentialsNonExpired(LocalDateTime credentialsNonExpired) {
+        this.credentialsNonExpired = credentialsNonExpired;
     }
 
     public Boolean getIsAccountNonLocked() {
         return isAccountNonLocked;
     }
 
-    public void setIsAccountNonLocked(Boolean isAccountNonLocked) {
-        this.isAccountNonLocked = isAccountNonLocked;
+    public void setIsAccountNonLocked(Boolean accountNonLocked) {
+        isAccountNonLocked = accountNonLocked;
     }
 
-    public LocalDateTime getIsCredentialsNonExpired() {
-        return isCredentialsNonExpired;
+    public LocalDateTime getAccountNonExpired() {
+        return accountNonExpired;
     }
 
-    public void setIsCredentialsNonExpired(LocalDateTime isCredentialsNonExpired) {
-        this.isCredentialsNonExpired = isCredentialsNonExpired;
+    public void setAccountNonExpired(LocalDateTime accountNonExpired) {
+        this.accountNonExpired = accountNonExpired;
     }
 
     public Boolean getIsEnabled() {
@@ -212,5 +218,13 @@ public class User extends Auditable implements UserDetails {
 
     public void setGroups(Set<GroupUser> groups) {
         this.groups = groups;
+    }
+
+    public Set<UserPermission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Set<UserPermission> permissions) {
+        this.permissions = permissions;
     }
 }

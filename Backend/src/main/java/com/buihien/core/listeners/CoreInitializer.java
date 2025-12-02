@@ -4,16 +4,19 @@ import com.buihien.core.CoreConstants;
 import com.buihien.core.configuration.TelegramNotiBot;
 import com.buihien.core.domain.SystemConfig;
 import com.buihien.core.domain.security.Permission;
-import com.buihien.core.domain.security.Role;
 import com.buihien.core.domain.security.User;
-import com.buihien.core.domain.security.UserRole;
-import com.buihien.core.repository.*;
+import com.buihien.core.domain.security.UserPermission;
+import com.buihien.core.repository.PermissionRepository;
+import com.buihien.core.repository.SystemConfigRepository;
+import com.buihien.core.repository.UserPermissionRepository;
+import com.buihien.core.repository.UserRepository;
 import com.buihien.core.util.CacheUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +36,7 @@ public class CoreInitializer {
     private String endpointUrl;
 
     @Bean
+    @Order(1)
     CommandLineRunner setUpSystemConfig(SystemConfigRepository systemConfigRepository) {
         return args -> {
             for (CoreConstants.SystemConfig config : CoreConstants.SystemConfig.values()) {
@@ -46,10 +50,12 @@ public class CoreInitializer {
                     systemConfigRepository.save(systemConfig);
                 }
             }
+            log.info("✅ setUpSystemConfig successfully.");
         };
     }
 
     @Bean
+    @Order(2)
     CommandLineRunner loadHashSystemConfig(SystemConfigRepository systemConfigRepository) {
         return args -> {
             List<SystemConfig> list = systemConfigRepository.findAll();
@@ -79,8 +85,8 @@ public class CoreInitializer {
         }
     }
 
-
     @Bean
+    @Order(1)
     CommandLineRunner setUpPermission(PermissionRepository permissionRepository) {
         return args -> {
 
@@ -98,55 +104,44 @@ public class CoreInitializer {
             if (!entityList.isEmpty()) {
                 permissionRepository.saveAll(entityList);
             }
-
-            System.out.println("🎉 Auto-generate permissions done!");
+            log.info("✅ setUpPermission successfully.");
         };
     }
 
     @Bean
     @Transactional
-    CommandLineRunner setUpSystemAdmin(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder) {
+    @Order(2)
+    CommandLineRunner setUpSystemAdmin(UserRepository userRepository, PermissionRepository permissionRepository, UserPermissionRepository userPermissionRepository, PasswordEncoder passwordEncoder) {
         return args -> {
-            // 1️⃣ Check nếu đã có user ROLE_SYSTEM_ADMIN
-            boolean isSystemAdmin = userRepository.countUserByRole(ROLE_SYSTEM_ADMIN) > 0;
-            if (isSystemAdmin) {
-                System.out.println("🎉 ROLE_SYSTEM_ADMIN already exists!");
-                return;
+            boolean isSystemAdmin = userRepository.countUserByPermission(SYSTEM_ADMIN) > 0;
+            if (!isSystemAdmin) {
+                User adminUser = userRepository.findByUsername(ADMIN).orElse(new User());
+                adminUser.setVoided(false);
+                adminUser.setUsername(ADMIN);
+                adminUser.setPassword(passwordEncoder.encode(PASS));
+                adminUser.setIsEnabled(Boolean.TRUE);
+                adminUser.setIsActive(Boolean.TRUE);
+
+                Permission permission = permissionRepository.findByName(SYSTEM_ADMIN).orElseGet(() -> {
+                    Permission entity = new Permission();
+                    entity.setVoided(false);
+                    entity.setName(SYSTEM_ADMIN);
+                    entity = permissionRepository.saveAndFlush(entity);
+                    return entity;
+                });
+                UserPermission userPermission = userPermissionRepository.findByPermissionAndUser(permission.getId(), adminUser.getId());
+                if (userPermission == null) {
+                    userPermission = new UserPermission();
+                }
+                userPermission.setVoided(false);
+                userPermission.setUser(adminUser);
+                userPermission.setPermission(permission);
+
+                adminUser.setPermissions(Set.of(userPermission));
+
+                userRepository.save(adminUser);
             }
-
-            // 2️⃣ Lấy hoặc tạo role SYSTEM_ADMIN
-            Role systemAdminRole = roleRepository.findByName(ROLE_SYSTEM_ADMIN)
-                    .stream().findFirst()
-                    .orElseGet(() -> {
-                        Role role = new Role();
-                        role.setName(ROLE_SYSTEM_ADMIN);
-                        return roleRepository.saveAndFlush(role);
-                    });
-
-            // 3️⃣ Tạo user admin
-            User adminUser = userRepository.findByUsername(ADMIN).orElse(new User());
-            adminUser.setVoided(false);
-            adminUser.setUsername(ADMIN);
-            adminUser.setPassword(passwordEncoder.encode(PASS));
-            adminUser.setIsEnabled(Boolean.TRUE);
-            adminUser.setIsActive(Boolean.TRUE);
-
-            // 4️⃣ Tạo UserRole
-            UserRole userRole = userRoleRepository.findByUserAndRole(adminUser.getId(), systemAdminRole.getId());
-            if (userRole == null) {
-                userRole = new UserRole();
-            }
-            userRole.setVoided(false);
-            userRole.setUser(adminUser);
-            userRole.setRole(systemAdminRole);
-
-            // 5️⃣ Thêm vào user
-            adminUser.setRoles(Set.of(userRole));
-
-            // 6️⃣ Save user, cascade save UserRole
-            userRepository.save(adminUser);
-
-            System.out.println("🎉 Auto-generate ROLE_SYSTEM_ADMIN done!");
+            log.info("✅ setUpSystemAdmin successfully.");
         };
     }
 }

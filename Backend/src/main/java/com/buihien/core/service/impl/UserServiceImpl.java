@@ -10,13 +10,17 @@ import com.buihien.core.exception.UnauthorizedException;
 import com.buihien.core.generic.GenericServiceImpl;
 import com.buihien.core.repository.UserRepository;
 import com.buihien.core.service.GroupUserService;
+import com.buihien.core.service.UserPermissionService;
 import com.buihien.core.service.UserRoleService;
 import com.buihien.core.service.UserService;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -35,7 +39,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.buihien.core.CoreConstants.ROLE_SYSTEM_ADMIN;
+import static com.buihien.core.CoreConstants.SYSTEM_ADMIN;
 import static com.buihien.core.util.CacheUtils.HashCachePermission;
 
 @Service
@@ -48,6 +52,8 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserDto, UserSearc
     private UserRoleService userRoleService;
     @Autowired
     private GroupUserService groupUserService;
+    @Autowired
+    private UserPermissionService userPermissionService;
     @Autowired
     private UserRepository userRepository;
 
@@ -73,8 +79,9 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserDto, UserSearc
             }
             entity.setPassword(passwordEncoder.encode(dto.getPassword()));
         }
-        entity.setIsAccountNonExpired(dto.getIsAccountNonExpired());
+        entity.setAccountNonExpired(dto.getAccountNonExpired());
         entity.setIsAccountNonLocked(dto.getIsAccountNonLocked());
+        entity.setCredentialsNonExpired(dto.getCredentialsNonExpired());
         entity.setIsEnabled(dto.getIsEnabled());
         entity.setIsActive(dto.getIsActive());
 
@@ -95,7 +102,7 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserDto, UserSearc
 
         userRoleService.handleSetRoleForUser(dto, entity);
         groupUserService.handleSetGroupForUser(dto, entity);
-
+        userPermissionService.handleSetPermissionForUser(dto, entity);
         entity = userRepository.save(entity);
 
         String username = entity.getUsername();
@@ -207,11 +214,8 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserDto, UserSearc
         Set<String> permissionNames = HashCachePermission.get(user.getUsername());
 
         if (permissionNames == null) {
+            log.info("load permissions for current user: " + user.getUsername());
             permissionNames = new HashSet<>(userRepository.findAllPermissionsNative(user.getUsername()));
-        }
-
-        if (permissionNames == null) {
-            permissionNames = new HashSet<>();
         }
 
         permissionNames = permissionNames.stream()
@@ -219,8 +223,8 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserDto, UserSearc
                 .map(String::trim)
                 .collect(Collectors.toSet());
 
-        if (userRepository.countUserByRoleUserName(ROLE_SYSTEM_ADMIN, user.getUsername()) > 0) {
-            permissionNames.add(ROLE_SYSTEM_ADMIN);
+        if (userRepository.countUserByPermissionUserName(SYSTEM_ADMIN, user.getUsername()) > 0) {
+            permissionNames.add(SYSTEM_ADMIN);
         }
 
         HashCachePermission.put(user.getUsername(), permissionNames);
@@ -248,6 +252,7 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserDto, UserSearc
         if (user == null) {
             return List.of(); // Trả về empty list nếu user null (chưa đăng nhập)
         }
+        this.loadPermission(user);
 
         return user.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -257,16 +262,65 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserDto, UserSearc
     }
 
     @Override
-    public Page<UserDto> pagingSearch(UserSearchDto search) {
-        return null;
+    public Page<UserDto> pagingSearch(UserSearchDto dto) {
+        int pageIndex = (dto.getPageIndex() == null || dto.getPageIndex() < 1) ? 0 : dto.getPageIndex() - 1;
+        int pageSize = (dto.getPageSize() == null || dto.getPageSize() < 10) ? 10 : dto.getPageSize();
+
+        StringBuilder sqlCount = new StringBuilder("SELECT COUNT(entity.id) FROM User entity WHERE (1=1) ");
+        StringBuilder sql = new StringBuilder("SELECT new com.buihien.core.dto.security.UserDto(entity, true) FROM User entity WHERE (1=1) ");
+
+        sql.append(builderWhereClause(dto));
+        sqlCount.append(builderWhereClause(dto));
+
+        TypedQuery<UserDto> q = manager.createQuery(sql.toString(), UserDto.class);
+        TypedQuery<Long> qCount = manager.createQuery(sqlCount.toString(), Long.class);
+
+        setParameter(q, dto);
+        setParameter(qCount, dto);
+
+        q.setFirstResult(pageIndex * pageSize);
+        q.setMaxResults(pageSize);
+
+        return new PageImpl<>(q.getResultList(), PageRequest.of(pageIndex, pageSize), qCount.getSingleResult());
     }
 
     @Override
     public void setParameter(Query query, UserSearchDto dto) {
+        if (query == null) return;
+
+        if (dto.getKeyword() != null && StringUtils.hasText(dto.getKeyword())) {
+            query.setParameter("text", '%' + dto.getKeyword() + '%');
+        }
+        if (dto.getFromDate() != null) {
+            query.setParameter("fromDate", dto.getFromDate());
+        }
+        if (dto.getToDate() != null) {
+            query.setParameter("toDate", dto.getToDate());
+        }
     }
 
     @Override
     public StringBuilder builderWhereClause(UserSearchDto dto) {
-        return null;
+        StringBuilder whereClause = new StringBuilder();
+
+        if (dto.getVoided() == null || !dto.getVoided()) {
+            whereClause.append(" AND entity.voided = false ");
+        } else {
+            whereClause.append(" AND entity.voided = true ");
+        }
+
+        if (dto.getKeyword() != null && StringUtils.hasText(dto.getKeyword())) {
+            whereClause.append(" AND (LOWER(entity.username) LIKE LOWER(:text)) ");
+        }
+
+        if (dto.getFromDate() != null) {
+            whereClause.append(" AND entity.createDate >= :fromDate ");
+        }
+        if (dto.getToDate() != null) {
+            whereClause.append(" AND entity.createDate <= :toDate ");
+        }
+        whereClause.append(dto.getOrderBy() != null && dto.getOrderBy() ? " ORDER BY entity.createdAt ASC" : " ORDER BY entity.createdAt DESC");
+
+        return whereClause;
     }
 }

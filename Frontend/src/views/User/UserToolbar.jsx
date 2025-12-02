@@ -2,13 +2,11 @@ import React, { memo } from "react";
 import { Form, Formik } from "formik";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
-import { Button, Tooltip } from "@mui/material";
+import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import AddIcon from "@mui/icons-material/Add";
-import LockOpenIcon from "@mui/icons-material/LockOpen";
-import LockIcon from "@mui/icons-material/Lock";
 import CommonTextField from "../../common/Form/CommonTextField";
 import { observer } from "mobx-react-lite";
 import UserFilter from "./UserFilter";
@@ -60,36 +58,36 @@ function UserToolbar () {
                   >
                     {t ("general.button.add")}
                   </Button>
-                  <Tooltip title={t ("Mở khóa")}>
-                    <Button
-                        variant="outlined"
-                        onClick={handleOpenPopupUnEnabledUser}
-                        startIcon={<LockOpenIcon/>}
-                        disabled={selectedDataList?.length <= 0}
-                        className={`!rounded-lg ${
-                            selectedDataList?.length > 0
-                                ? "!border-green-400 !text-green-700 hover:!bg-green-50"
-                                : "!border-gray-200 !text-gray-400"
-                        }`}
-                    >
-                      {t ("Mở khóa")}
-                    </Button>
-                  </Tooltip>
-                  <Tooltip title={t ("Khóa")}>
-                    <Button
-                        variant="outlined"
-                        onClick={handleOpenPopupEnabledUser}
-                        startIcon={<LockIcon/>}
-                        disabled={selectedDataList?.length <= 0}
-                        className={`!rounded-lg ${
-                            selectedDataList?.length > 0
-                                ? "!border-amber-400 !text-amber-700 hover:!bg-amber-50"
-                                : "!border-gray-200 !text-gray-400"
-                        }`}
-                    >
-                      {t ("Khóa")}
-                    </Button>
-                  </Tooltip>
+                  {/*<Tooltip title={t ("Mở khóa")}>*/}
+                  {/*  <Button*/}
+                  {/*      variant="outlined"*/}
+                  {/*      onClick={handleOpenPopupUnEnabledUser}*/}
+                  {/*      startIcon={<LockOpenIcon/>}*/}
+                  {/*      disabled={selectedDataList?.length <= 0}*/}
+                  {/*      className={`!rounded-lg ${*/}
+                  {/*          selectedDataList?.length > 0*/}
+                  {/*              ? "!border-green-400 !text-green-700 hover:!bg-green-50"*/}
+                  {/*              : "!border-gray-200 !text-gray-400"*/}
+                  {/*      }`}*/}
+                  {/*  >*/}
+                  {/*    {t ("Mở khóa")}*/}
+                  {/*  </Button>*/}
+                  {/*</Tooltip>*/}
+                  {/*<Tooltip title={t ("Khóa")}>*/}
+                  {/*  <Button*/}
+                  {/*      variant="outlined"*/}
+                  {/*      onClick={handleOpenPopupEnabledUser}*/}
+                  {/*      startIcon={<LockIcon/>}*/}
+                  {/*      disabled={selectedDataList?.length <= 0}*/}
+                  {/*      className={`!rounded-lg ${*/}
+                  {/*          selectedDataList?.length > 0*/}
+                  {/*              ? "!border-amber-400 !text-amber-700 hover:!bg-amber-50"*/}
+                  {/*              : "!border-gray-200 !text-gray-400"*/}
+                  {/*      }`}*/}
+                  {/*  >*/}
+                  {/*    {t ("Khóa")}*/}
+                  {/*  </Button>*/}
+                  {/*</Tooltip>*/}
                   {/* Nút xóa */}
                   <Button
                       variant="outlined"

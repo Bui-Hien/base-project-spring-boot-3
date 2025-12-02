@@ -23,21 +23,21 @@ public class RestSystemConfigController {
     private SystemConfigService systemConfigService;
 
     @PostMapping("/save-or-update")
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_CONFIG_WRITE)")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_CONFIG_WRITE)")
     public ResponseData<SystemConfigDto> saveOrUpdate(@Valid @RequestBody SystemConfigDto dto) {
         SystemConfigDto response = systemConfigService.saveOrUpdate(dto);
         return new ResponseData<>(dto.getId() == null ? HttpStatus.CREATED.value() : HttpStatus.ACCEPTED.value(), dto.getId() == null ? "Thêm mới cấu hình hệ thống thành công" : "Chỉnh sửa bản cấu hình hệ thống thành công", response);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_CONFIG_VIEW)")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_CONFIG_VIEW)")
     public ResponseData<SystemConfigDto> getById(@PathVariable UUID id) {
         SystemConfigDto response = systemConfigService.getById(id);
         return new ResponseData<>(HttpStatus.OK.value(), "Lấy cấu hình hệ thống thành công", response);
     }
 
     @PostMapping("/paging-search")
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_CONFIG_VIEW)")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_CONFIG_VIEW)")
     public ResponseData<Page<SystemConfigDto>> pagingSearch(@Valid @RequestBody SearchDto dto) {
         Page<SystemConfigDto> result = systemConfigService.pagingSearch(dto);
         return new ResponseData<>(HttpStatus.OK.value(), "Lấy danh sách cấu hình hệ thống thành công", result);

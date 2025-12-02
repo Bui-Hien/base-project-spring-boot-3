@@ -35,7 +35,7 @@ public class RestVideoController {
      * 1) INITIALIZE UPLOAD
      * ---------------------------------------------------- */
     @PostMapping("/init")
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).VIDEO_WRITE)")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).VIDEO_WRITE)")
     public ResponseEntity<String> initUpload() throws Exception {
         String uploadId = videoService.initUpload();
         return ResponseEntity.ok(uploadId);
@@ -45,7 +45,7 @@ public class RestVideoController {
      * 2) UPLOAD CHUNK
      * ---------------------------------------------------- */
     @PostMapping("/upload")
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).VIDEO_WRITE)")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).VIDEO_WRITE)")
     public ResponseEntity<String> uploadChunk(
             @RequestParam String uploadId,
             @RequestParam int index,
@@ -60,7 +60,7 @@ public class RestVideoController {
      * 3) COMPLETE UPLOAD
      * ---------------------------------------------------- */
     @PostMapping("/complete")
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).VIDEO_WRITE)")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).VIDEO_WRITE)")
     public ResponseEntity<FileDescription> completeUpload(
             @RequestParam String uploadId,
             @RequestParam String fileName
@@ -74,7 +74,7 @@ public class RestVideoController {
      * 4) STREAM HLS MANIFEST
      * ---------------------------------------------------- */
     @GetMapping("/hls/{id}/manifest.m3u8")
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).VIDEO_VIEW)")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).VIDEO_VIEW)")
     public ResponseEntity<Resource> getManifest(@PathVariable UUID id) throws Exception {
         Path manifest = getHlsBase().resolve(id.toString()).resolve("manifest.m3u8");
         if (!Files.exists(manifest)) return ResponseEntity.notFound().build();
@@ -89,7 +89,7 @@ public class RestVideoController {
      * 5) STREAM HLS SEGMENT
      * ---------------------------------------------------- */
     @GetMapping("/hls/{id}/{segment}")
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).VIDEO_VIEW)")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).VIDEO_VIEW)")
     public ResponseEntity<Resource> getSegment(
             @PathVariable UUID id,
             @PathVariable String segment

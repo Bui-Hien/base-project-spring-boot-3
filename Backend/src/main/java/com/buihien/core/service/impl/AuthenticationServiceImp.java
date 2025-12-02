@@ -61,7 +61,7 @@ public class AuthenticationServiceImp implements AuthenticationService {
         if (Boolean.FALSE.equals(user.getIsEnabled())) {
             throw new ForbiddenException("Tài khoản của bạn chưa được kích hoạt.");
         }
-        if (Boolean.FALSE.equals(user.getIsActive())) {
+        if (Boolean.TRUE.equals(user.getIsActive())) {
             throw new ForbiddenException("Tài khoản của bạn đã bị tạm khóa do đăng nhập sai quá nhiều lần.");
         }
         // Xác thực người dùng

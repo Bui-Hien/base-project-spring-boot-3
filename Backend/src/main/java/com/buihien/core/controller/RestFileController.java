@@ -37,21 +37,21 @@ public class RestFileController {
     private FileDescriptionService fileDescriptionService;
 
     @PostMapping(value = "/save-file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).FILE_WRITE)")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).FILE_WRITE)")
     public ResponseData<FileDescriptionDto> saveFile(@RequestParam("file") MultipartFile file) {
         FileDescriptionDto result = fileDescriptionService.saveFile(file);
         return new ResponseData<>(HttpStatus.CREATED.value(), "Successfully saved", result);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).FILE_DELETE)")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).FILE_DELETE)")
     public ResponseData<?> deleteById(@PathVariable UUID id) {
         fileDescriptionService.deleteById(id);
         return new ResponseData<>(HttpStatus.NO_CONTENT.value(), "Delete success by id " + id);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).FILE_VIEW)")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).FILE_VIEW)")
     public ResponseEntity<Resource> getFileById(@PathVariable("id") UUID id) throws IOException {
         FileDescriptionDto result = fileDescriptionService.getById(id);
 

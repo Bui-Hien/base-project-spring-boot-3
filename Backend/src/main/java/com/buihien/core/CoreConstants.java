@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CoreConstants {
-    public static final String ADMIN = "buixuanhien@gmail.com";
+    public static final String ADMIN = "admin@gmail.com";
     public static final String PASS = "123456";
 
     public static final String REMOVE_CHANGE_TYPE = "REMOVE";
     public static final String UPDATE_CHANGE_TYPE = "UPDATE";
 
     //permission
-    public static final String ROLE_SYSTEM_ADMIN = "ROLE_SYSTEM_ADMIN";
+    public static final String SYSTEM_ADMIN = "SYSTEM_ADMIN";
 
     public static final String USER_VIEW = createPermission(ControllerEnum.USER, PermissionActionEnum.VIEW);
     public static final String USER_WRITE = createPermission(ControllerEnum.USER, PermissionActionEnum.WRITE);
@@ -91,6 +91,7 @@ public class CoreConstants {
         result.addAll(List.of(VIDEO_VIEW, VIDEO_WRITE, VIDEO_DELETE));
         result.addAll(List.of(SYSTEM_CONFIG_VIEW, SYSTEM_CONFIG_WRITE));
         result.addAll(List.of(PERMISSION_VIEW));
+        result.addAll(List.of(SYSTEM_ADMIN));
 
         return result;
     }

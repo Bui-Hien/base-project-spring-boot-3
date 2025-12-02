@@ -22,28 +22,28 @@ public class RestGroupController {
     private GroupService groupService;
 
     @PostMapping("/save-or-update")
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).GROUP_WRITE)")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).GROUP_WRITE)")
     public ResponseData<GroupDto> saveOrUpdate(@Valid @RequestBody GroupDto dto) {
         GroupDto response = groupService.saveOrUpdate(dto);
         return new ResponseData<>(dto.getId() == null ? HttpStatus.CREATED.value() : HttpStatus.ACCEPTED.value(), dto.getId() == null ? "Thêm mới nhóm quyên thành công" : "Chỉnh sửa bản nhóm quyên thành công", response);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).GROUP_DELETE)")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).GROUP_DELETE)")
     public ResponseData<Void> deleteById(@PathVariable UUID id) {
         groupService.deleteById(id);
         return new ResponseData<>(HttpStatus.NO_CONTENT.value(), "Xóa nhóm quyên thành công");
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).GROUP_VIEW)")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).GROUP_VIEW)")
     public ResponseData<GroupDto> getById(@PathVariable UUID id) {
         GroupDto response = groupService.getById(id);
         return new ResponseData<>(HttpStatus.OK.value(), "Lấy nhóm quyên thành công", response);
     }
 
     @PostMapping("/paging-search")
-    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).ROLE_SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).GROUP_VIEW)")
+    @PreAuthorize("hasAuthority(T(com.buihien.core.CoreConstants).SYSTEM_ADMIN) or hasAuthority(T(com.buihien.core.CoreConstants).GROUP_VIEW)")
     public ResponseData<Page<GroupDto>> pagingSearch(@Valid @RequestBody SearchDto dto) {
         Page<GroupDto> result = groupService.pagingSearch(dto);
         return new ResponseData<>(HttpStatus.OK.value(), "Lấy danh sách nhóm quyên thành công", result);

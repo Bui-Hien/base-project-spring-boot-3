@@ -25,7 +25,8 @@ public class GlobalExceptionHandler {
     })
     @ResponseStatus(BAD_REQUEST)
     public ErrorResponse handleValidationException(Exception e, WebRequest request) {
-        log.error(e.getMessage(), e);
+        log.error("handleValidationException" + e.getMessage(), e);
+
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setTimestamp(new Date());
         errorResponse.setStatus(BAD_REQUEST.value());
@@ -58,7 +59,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(NOT_FOUND)
     public ErrorResponse handleNotFoundException(NotFoundException e, WebRequest request) {
-        log.error(e.getMessage(), e);
+        log.error("handleNotFoundException" + e.getMessage(), e);
+
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setTimestamp(new Date());
         errorResponse.setPath(request.getDescription(false).replace("uri=", ""));
@@ -72,7 +74,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ForbiddenException.class)
     @ResponseStatus(FORBIDDEN)
     public ErrorResponse handleForbiddenException(ForbiddenException e, WebRequest request) {
-        log.error(e.getMessage(), e);
+        log.error("handleForbiddenException" + e.getMessage(), e);
 
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setTimestamp(new Date());
@@ -87,7 +89,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseStatus(UNAUTHORIZED)
     public ErrorResponse handleUnauthorizedException(UnauthorizedException e, WebRequest request) {
-        log.error(e.getMessage(), e);
+        log.error("handleUnauthorizedException" + e.getMessage(), e);
 
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setTimestamp(new Date());
@@ -102,7 +104,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({ConflictException.class})
     @ResponseStatus(CONFLICT)
     public ErrorResponse handleConflictException(ConflictException e, WebRequest request) {
-        log.error(e.getMessage(), e);
+        log.error("handleConflictException" + e.getMessage(), e);
 
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setTimestamp(new Date());
@@ -118,7 +120,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     public ErrorResponse handleException(Exception e, WebRequest request) {
-        log.error(e.getMessage(), e);
+        log.error("handleException" + e.getMessage(), e);
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setTimestamp(new Date());
         errorResponse.setPath(request.getDescription(false).replace("uri=", ""));
